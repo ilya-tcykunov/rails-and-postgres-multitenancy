@@ -1,0 +1,129 @@
+.container {
+  background: white;
+  -webkit-filter: contrast(10);
+  -moz-filter: contrast(10);
+  filter: contrast(10);
+  padding: 30px;
+  position: relative;
+  height: 100px;
+}
+
+.checkpoint {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  background: black;
+  position: relative;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  filter: blur(5px);
+}
+
+.checkpoint:first-of-type {
+  margin-left: 30px;
+}
+
+.checkpoint:last-of-type {
+  margin-right: 30px;
+}
+
+.blob {
+  display: block;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: black;
+  position: absolute;
+  top: 30px;
+  margin: 0;
+  padding: 0;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  filter: blur(5px);
+}
+
+.radials {
+  display: block;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: black;
+  position: absolute;
+  top: 30px;
+  margin: 0;
+  padding: 0;
+  -webkit-filter: blur(5px);
+  -moz-filter: blur(5px);
+  filter: blur(5px);
+  z-index: -1;
+}
+
+.radial-wrap {
+  display: inline-block;
+  width: 64px;
+  height: 14px;
+  margin: 0;
+  padding: 0;
+  background: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.radial {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: black;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.radial-wrap:nth-of-type(1) {
+  -webkit-transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.radial-wrap:nth-of-type(2) {
+  -webkit-transform: translate(-50%, -50%) rotate(30deg);
+}
+
+.radial-wrap:nth-of-type(3) {
+  -webkit-transform: translate(-50%, -50%) rotate(-30deg);
+}
+
+.radial:nth-child(2n) {
+  -webkit-animation: slide 1s ease-in-out 0s infinite alternate;
+  -moz-animation: slide 1s ease-in-out 0s infinite alternate;
+  animation: slide 1s ease-in-out 0s infinite alternate;
+}
+
+.radial:nth-child(2n+1) {
+  -webkit-animation: slide 1s ease-in-out 0s infinite alternate-reverse;
+  -moz-animation: slide 1s ease-in-out 0s infinite alternate-reverse;
+  animation: slide 1s ease-in-out 0s infinite alternate-reverse;
+}
+
+@-webkit-keyframes slide {
+  0% {left: 0px;}
+  100% {left: 50px;}
+}
+
+@-moz-keyframes slide {
+  0% {left: 0px;}
+  100% {left: 50px;}
+}
+
+@keyframes slide {
+  0% {left: 0px;}
+  100% {left: 50px;}
+}
+
+
+
