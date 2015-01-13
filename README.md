@@ -116,17 +116,28 @@ structure.sql
       default Setting.mail_settings[:default_fields]
     end
 
-так и пропатчив ActionMailer::Base (если мейлеров много)
+так и пропатчив ActionMailer::Base (если мейлеров много, ил если нужно чтобы сторонние библиотеки, такие как Devise, отправляли свои уведомления с правильными настройками)
 
     require 'active_support/concern'
 
-    module ActionMailerBasePatch
-      extend ActiveSupport::Concern
+	module ActionMailerBasePatch
+		extend ActiveSupport::Concern
 
-      included do
-        default Setting.mail_settings[:default_fields]
-      end
-    end
+		def mail_with_tenant_settings(headers = {}, &block)
+	    	self.class.default_url_options[:host] = Setting.host
+
+    		_headers = headers
+      		Setting.mail_settings[:default_fields].each do |k,v|
+        		_headers[k] = v if _headers[k].blank? && v.present?
+      		end
+
+	    	mail_without_tenant_settings(_headers, &block)
+	    end
+
+		included do
+    		alias_method_chain :mail, :tenant_settings
+ 		end
+	end
 
     ActionMailer::Base.send(:include, ActionMailerBasePatch)
 	
