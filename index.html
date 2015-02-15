@@ -1,44 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Rails-and-postgres-multitenancy by ilya-tcykunov</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
     <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <title>Rails-and-postgres-multitenancy by ilya-tcykunov</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <div id="container">
+      <div class="inner">
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
+        <header>
           <h1>Rails-and-postgres-multitenancy</h1>
-          <p></p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/ilya-tcykunov">ilya-tcykunov</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
+          <h2></h2>
+        </header>
 
-        <h1>
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/ilya-tcykunov/rails-and-postgres-multitenancy" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
 <a id="ruby-on-rails-и-postgresql-мультидоменность" class="anchor" href="#ruby-on-rails-%D0%B8-postgresql-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ruby on Rails и PostgreSQL: мультидоменность</h1>
 
 <p>В интернете можно найти много похожих между собой статей, в которых говорится, как реализоать мультидоменность приложения на RoR, используя схемы PostgreSQL. Например, <a href="http://railscasts.com/episodes/389-multitenancy-with-postgresql?view=asciicast">эта</a> и <a href="http://jerodsanto.net/2011/07/building-multi-tenant-rails-apps-with-postgresql-schemas/">эта</a>. Лично я в качестве основы использовал код из railscast. Но при практической реализации какого-либо варианта возникает множество проблем. В данной статье будут описаны некоторые из таких проблем и мои способы их решения.</p>
@@ -46,7 +39,7 @@
 <h2>
 <a id="Кеширование-в-переменных" class="anchor" href="#%D0%9A%D0%B5%D1%88%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5-%D0%B2-%D0%BF%D0%B5%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D0%BD%D1%8B%D1%85" aria-hidden="true"><span class="octicon octicon-link"></span></a>Кеширование в переменных</h2>
 
-<p>Чтобы минимизировать количесвтво обращений к базе данных или чтобы лишний раз не выполнять инициализацию одних и тех же объектов неоторые вещи выгодно рассчитывать один раз и инициализировать, например, так: </p>
+<p>Чтобы минимизировать количесвтво обращений к базе данных или чтобы лишний раз не выполнять инициализацию одних и тех же объектов, некоторые вещи выгодно рассчитывать один раз и инициализировать, например, так: </p>
 
 <pre><code>def parse(*args)
   @connection ||= Connection.new
@@ -54,7 +47,7 @@
 end
 </code></pre>
 
-<p>Такое решение можно назвать кешированием в переменных, и при создании мультидоменности за этим нужно пристально следить. Вот <a href="http://timnew.me/blog/2012/07/17/use-postgres-multiple-schema-database-in-rails/">статья</a><a href="http://timnew.me/blog/2012/07/17/use-postgres-multiple-schema-database-in-rails/">статья</a>, в которой автор описывает свой опыт, когда он ошибся, используя для задания search_path прямым обращеним к базе данных через</p>
+<p>Такое решение можно назвать кешированием в переменных. Если кеширование в переменных в случае обычного приложения даёт экономию при выполнении долгих или одинаковых операций, то в случае мультидоменности такое кеширование мало применимо. Ведь в разных доменах может использоваться один и тот же код, но инициализация этого кода на каждом домене разная. Вот, например, <a href="http://timnew.me/blog/2012/07/17/use-postgres-multiple-schema-database-in-rails/">статья</a>, в которой автор описывает свой опыт, когда он ошибся, используя для задания search_path прямое обращение к базе данных через</p>
 
 <pre><code>ActiveRecord::Base.connection.execute "SET search_path TO #{schema};"
 </code></pre>
@@ -64,12 +57,14 @@ end
 <pre><code>ActiveRecord::Base.connection.schema_search_path schema
 </code></pre>
 
-<p>В ядре Rails используется как раз второй вариант, в котором происходит кеширование search_path в переменной. Соответственно, джемы часто не знали, что search_path в базе другой, что и приводило к ошибкам.</p>
+<p>В ядре Rails текущая схема базы данных сохраняется в переменной, и чтобы узнать текущую схему, достаточно прочитать эту переменную, а не выполнять запрос к базе данных. Методы schema_search_path= и schema_search_path как раз и созданы для управления и схемой в базе, и облуживанием кеширующей переменной. Когда автор менял схему в базе данных без использования этих методов, библиотеки Rails продолжали ориентироваться на схему из кеширующей переменной, что приводило к ошибкам в работе.</p>
 
 <h2>
 <a id="Расширения-postgresql-и-индексы" class="anchor" href="#%D0%A0%D0%B0%D1%81%D1%88%D0%B8%D1%80%D0%B5%D0%BD%D0%B8%D1%8F-postgresql-%D0%B8-%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D1%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>Расширения postgresql и индексы</h2>
 
-<p>При создании таблиц индекcы можно создавать тремя способами:</p>
+<p>При создании одинаковых таблиц в разных схемах postgresql может выозникнуть проблема с индексами.</p>
+
+<p>Индекcы можно создавать тремя способами:</p>
 
 <pre><code>create_table :test do |t|
   t.integer :data, index: true
@@ -78,10 +73,11 @@ end
 end
 
 add_index :test, :start_time
+
 execute 'create index end_time_index on test (end_time integer);'
 </code></pre>
 
-<p>При вызове add_index (в первом случае этот метод так же вызывается), происходит такая <a href="http://edgeapi.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/PostgreSQLAdapter/SchemaStatements.html#method-i-index_name_exists-3F">проверка</a>:</p>
+<p>При вызове add_index (в случае <code>t.integer :data, index: true</code> этот метод также вызывается), происходит такая <a href="http://edgeapi.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/PostgreSQLAdapter/SchemaStatements.html#method-i-index_name_exists-3F">проверка</a>:</p>
 
 <pre><code>def index_name_exists?(table_name, index_name, default)
   exec_query("SELECT COUNT(*)
@@ -96,23 +92,14 @@ execute 'create index end_time_index on test (end_time integer);'
 end     
 </code></pre>
 
-<p>Таким образом смотрится, есть ли индекс с указанным названием в любой схеме, а не только в первой из списка search_path. Алгоритм создания нового домена следующий:</p>
+<p>То есть смотрится, имеется ли индекс с указанным названием в любой схеме из присутствующих на данный момент в search_path, а не только в первой. Если на момент выполнения миграции в search_path требуется иметь какую-то схему, в которой уже есть индекс с таким же названием, то index_name_exists? будет true, и миграция завершится ошибкой. 
+Допустим для определённости, что search_path == 'tenant1,public', и что в public есть конфликтный индекс. Вариантов выхода из ситуации несколько.</p>
 
-<ul>
-<li>Создать доменную схему</li>
-<li>Включить её в search_path</li>
-<li>Выполнить миграцию</li>
-</ul>
-
-<p>Но миграция может завершиться с ошибкой, потому что search_path на этом этапе обычно 'tenant1,public', и index_name_exists? будет true, если в public схеме уже есть какая-либо таблица с индексом.</p>
-
-<p>Вариантов выхода из ситуации два.</p>
-
-<p>Первый - во всех миграциях не использовать index: true при создании таблиц и add_index, а использовать execute('create index ...'). Этот вариант не удобен: банально долго писать. К тому же, что если мультидоменность создаётся на уже существующем проекте с большим количеством уже готовых миграций, то в них во всех придётся переписывать создание индексов.</p>
+<p>Первый - во всех миграциях не использовать при создании таблиц index: true или и add_index, а использовать execute('create index ...'). Этот вариант не удобен: долго писать. К тому же, что если мультидоменность создаётся на уже существующем проекте с большим количеством имеющихся миграций, то в них во всех придётся переписывать создание индексов.</p>
 
 <p>Второй вариант - не добавлять public схему в search_path при миграциях. То есть search_path в нашем случае будет 'tenant1'. Но если не добавлять public, возникает другая проблема. По умолчанию расширения postgres ставятся в public схему, и поэтому может возникнуть ошибка, что, к примеру, тип данных 'hstore' не найден (при использовании расшения hstore). Кроме того нельзя поставить расширение ещё раз, но в другую схему (tenant1). Такова особенность postgres: расширение ставится в какую-то схему, но повторно савить его в другие нельзя. Решение этой проблемы - ставить расширения PostgreSQL в отдельную схему, и постоянно включать её в search_path.</p>
 
-<p>Я решил воспользоваться вторым вариантом, создал специальную схему для установки в неё расширений и подключаю её всегда. Перед миграцией search_path='tenant1,extensions', во время обычной работы - 'tenant1,oublic,extensions'. Настройку базы и ролей делаю так:</p>
+<p>В своём проекте я решил воспользоваться вторым вариантом, создал специальную схему для установки в неё расширений и подключаю её всегда. Перед миграцией search_path='tenant1,extensions', во время обычной работы - 'tenant1,public,extensions'. Настройку базы и ролей делаю так:</p>
 
 <pre><code>sudo -u postgres psql -c "CREATE SCHEMA extensions" template1
 sudo -u postgres psql -c "CREATE EXTENSION hstore WITH SCHEMA extensions" template1
@@ -123,14 +110,95 @@ sudo -u postgres psql -c 'ALTER ROLE prj SET search_path TO "$user", public, ext
 sudo -u postgres psql -c "GRANT USAGE ON SCHEMA extensions TO prj" template1
 </code></pre>
 
+<p>Можно придумать и другие способы обхода проблемы с индексами. Например, сделать патч с изменением реализации index_name_exists?, или удалить конфликтные индексы из схемы, где они не использутся (например, из public). Пусть каждый решает в зависимости от своих условий.</p>
+
 <h2>
-<a id="Создание-тамблиц-в-доменных-и-публичной-схемах" class="anchor" href="#%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D1%82%D0%B0%D0%BC%D0%B1%D0%BB%D0%B8%D1%86-%D0%B2-%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%BD%D1%8B%D1%85-%D0%B8-%D0%BF%D1%83%D0%B1%D0%BB%D0%B8%D1%87%D0%BD%D0%BE%D0%B9-%D1%81%D1%85%D0%B5%D0%BC%D0%B0%D1%85" aria-hidden="true"><span class="octicon octicon-link"></span></a>Создание тамблиц в доменных и публичной схемах</h2>
+<a id="Работа-с-тенантами" class="anchor" href="#%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0-%D1%81-%D1%82%D0%B5%D0%BD%D0%B0%D0%BD%D1%82%D0%B0%D0%BC%D0%B8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Работа с тенантами</h2>
 
-<p>TODO</p>
+<p>При организации мультидоменности нужно:</p>
 
-<p>self.table_name = 'public.tenants'</p>
+<ul>
+<li>Реализовать механизм создания тенана. Он включает создание схемы postgres, а также создание в этой схеме таблиц. </li>
+<li>Обеспечить функционирование механизма миграций. Для всех существующих тенантов должны работать задачи db:migrate и db:rollback.</li>
+</ul>
 
-<p>structure.sql</p>
+<h3>
+<a id="Создание-тенанта" class="anchor" href="#%D0%A1%D0%BE%D0%B7%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5-%D1%82%D0%B5%D0%BD%D0%B0%D0%BD%D1%82%D0%B0" aria-hidden="true"><span class="octicon octicon-link"></span></a>Создание тенанта</h3>
+
+<p>В моём проекте было решено сделать процесс создания быстрым. Для этого был реализован метод, который в основном потоке создаёт новую схему, а создание таблиц выполняет исполнением дампа structure.sql, который создаётся при самой первой миграции, когда ещё нет ни одного тенанта, и есть только схема public. Был использован structure.sql, а не schema.rb потому, что в миграциях присутствовали особые запросы к базе данных, которые не описать в написанном на руби schema.rb. Упрощённый код метода таков:</p>
+
+<pre><code>connection.execute("create schema if not exists #{schema}")
+scope_schema do
+  structure_file = "#{Rails.root}/db/structure.sql"
+  connection.execute self.class.structure_query(structure_file)
+end
+</code></pre>
+
+<p>Первая проблема structure.sql в том, что в нём есть команды, которые не должны выполняться при заполнении схемы, например, создание расширений или выставление search_path. Для этого код файла чистится следующим методом:</p>
+
+<pre><code>def self.structure_query(structure_sql_file)
+  structure_sql = open(structure_sql_file, 'r').read
+  structure_sql = structure_sql.gsub('SET search_path = public, pg_catalog;', '')
+  ...
+  # another filters
+end
+</code></pre>
+
+<p>Вторая проблемя structure.sql в том, как он генерируется. Когда тенантов нет, файл содержит код для создания и заполнения одной схемы - public. Когда имеется одна дополнительная схема тенанта, и выполнена миграция, код в structure.sql содержит команды как для создания и заполнения public, так и для созания и заполнения схемы тенанта tenant1. То есть, чтобы использовать structure.sql для создания очередного тенанта, нужно чистить structure.sql не так, как в самый первый раз. Можно для этого написать более продвинутый алгоритм, но есть способ указать рельсам, какие схемы должны учитываться в structure.sql. Проще всего это сделать в database.yml, указав там schema_search_path</p>
+
+<pre><code>development:
+  adapter: postgresql
+  database: multitenancy
+  host: localhost
+  port: 5432
+  encoding: utf-8
+  username: vasya
+  password: 123
+  pool: 5
+  timeout: 5000
+  schema_search_path: 'public,extensions'
+</code></pre>
+
+<h3>
+<a id="Миграции" class="anchor" href="#%D0%9C%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D0%B8" aria-hidden="true"><span class="octicon octicon-link"></span></a>Миграции</h3>
+
+<p>db:migrate и db:rollback должны выполняться для всех схем тенантов. Это можно сделать так:</p>
+
+<pre><code>db_tasks = %w[db:migrate db:migrate:up db:migrate:down db:rollback db:forward]
+
+namespace :multitenant do
+  db_tasks.each do |task_name|
+    desc "Run #{task_name} for each tenant"
+    task task_name =&gt; %w[environment db:load_config] do
+      if ActiveRecord::Base.connection.table_exists?(Tenant.table_name)
+        Tenant.scope_each_schema do |tenant|
+          Tenant::PUBLIC_TABLES.each do |table_name|
+            ActiveRecord::Base.connection.execute("create table #{tenant.schema}.#{table_name} (like public.#{table_name} including all);")
+          end
+
+          Rake::Task[task_name].execute
+
+          Tenant::PUBLIC_TABLES.each do |table_name|
+            ActiveRecord::Base.connection.execute("drop table if exists #{table_name} cascade;")
+          end
+        end
+      end
+    end
+  end
+end
+
+db_tasks.each do |task_name|
+  Rake::Task[task_name].enhance(["multitenant:#{task_name}"])
+end
+</code></pre>
+
+<p>Перед задачами из db_tasks выполняются свои задачи, которые запускают изначально запрашиваемую задачу для каждого из тенантов, предварительно изменив схему postgres. Представленная реализация отличается от той, что обычно преподносится в других статьях. Дело в том, что показанный вариант подразумевает наличие в проекте таблиц, общих для всех тенантов. Такие таблицы можно держать в схеме public, но удалить из схем тенантов, и в search_path всегда добавлять public в конце.
+В каком-либо проекте может оказаться, что во время миграции в search_path в силу каких-то причин нельзя иметь public. Тогда задачи миграции могут завершиться с ошибками, если в миграциях идёт обращение к публичной таблице. Кроме того, в таких миграциях может потребоваться не только наличие публичных таблиц, но и может осуществляться какая-то манипуляция с данными этой таблицы. В качестве решения комбинаций такого рода проблем было придумано следующее решение. Перед миграцией в схеме тенанта делаются копии публичных таблиц из схемы public (копируется только структура без данных, так как данных может быть очень много). Зачем выполняется миграция, почле чего публичнаые таблицы из схемы тенанта удаляются. В файлах миграции изменения минимальны: нужно лишь явно указывать схему для публичной таблицы, если требуются данные из такой таблицы. Для этого можно использовать как сырые sql запросы, так и явно определив   self.table_name в модели.</p>
+
+<pre><code>self.table_name = 'public.tenants'
+</code></pre>
+
+<p>Миграция для схемы public выполняется после выполнения миграций в схемах тенантов, чтобы данные публичных таблиц, используемые в миграциях тенантов, изменялись в последнюю очередь.</p>
 
 <h2>
 <a id="Кеш" class="anchor" href="#%D0%9A%D0%B5%D1%88" aria-hidden="true"><span class="octicon octicon-link"></span></a>Кеш</h2>
@@ -149,7 +217,7 @@ sudo -u postgres psql -c "GRANT USAGE ON SCHEMA extensions TO prj" template1
   end
   if Rails.cache.is_a?(ActiveSupport::Cache::DalliStore)
     original_cache_options = Rails.cache.dalli.instance_variable_get(:@options)
-    Rails.cache.dalli.instance_variable_set(:@options, original_cache_options.merge({namespace: schema}))
+    Rails.cache.dalli.instance_variable_set(:@options, original_cache_options.merge({namespace: cache_namespace}))
   end
   block.call(self)
 ensure
@@ -159,6 +227,18 @@ ensure
   self.class.connection.schema_search_path = original_search_path
 end
 </code></pre>
+
+<p>Есть ещё три момента, которые хотелось бы отметить в теме работы с кешем.</p>
+
+<ul>
+<li>Если на сервере запускается несколько мультидоменных приложений, а кеш обший, то названия неймспейсов кешей тенантов могут пересекаться между приложениями. Можно это предотвратить, например, используя время создания тенанта в имени неймспейса кеша. </li>
+<li>Иногда может понадобиться создать глобальный неймспейс в кеше. Напрмер, для работы с таблицами, общими для всех тенантов.</li>
+<li>
+<p>Если есть задача очистки кеша (например, при деплое), то нужно очишать все неймспейсы. В случае memcached, к примеру, выгодно это делать вызовом команды</p>
+
+<p>echo "flush_all" | /bin/netcat -q 2 127.0.0.1 11211</p>
+</li>
+</ul>
 
 <h2>
 <a id="Инициализаторы" class="anchor" href="#%D0%98%D0%BD%D0%B8%D1%86%D0%B8%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%82%D0%BE%D1%80%D1%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>Инициализаторы</h2>
@@ -172,16 +252,27 @@ end
 end
 </code></pre>
 
-<p>так и пропатчив ActionMailer::Base (если мейлеров много)</p>
+<p>так и пропатчив ActionMailer::Base (если мейлеров много, ил если нужно чтобы сторонние библиотеки, такие как Devise, отправляли свои уведомления с правильными настройками)</p>
 
 <pre><code>require 'active_support/concern'
 
 module ActionMailerBasePatch
-  extend ActiveSupport::Concern
+    extend ActiveSupport::Concern
 
-  included do
-    default Setting.mail_settings[:default_fields]
-  end
+    def mail_with_tenant_settings(headers = {}, &amp;block)
+        self.class.default_url_options[:host] = Setting.host
+
+        _headers = headers
+        Setting.mail_settings[:default_fields].each do |k,v|
+            _headers[k] = v if _headers[k].blank? &amp;&amp; v.present?
+        end
+
+        mail_without_tenant_settings(_headers, &amp;block)
+    end
+
+    included do
+        alias_method_chain :mail, :tenant_settings
+    end
 end
 
 ActionMailer::Base.send(:include, ActionMailerBasePatch)
@@ -190,13 +281,16 @@ ActionMailer::Base.send(:include, ActionMailerBasePatch)
 <h2>
 <a id="Заключение" class="anchor" href="#%D0%97%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5" aria-hidden="true"><span class="octicon octicon-link"></span></a>Заключение</h2>
 
-<p>Организация мультидоменности - это скурпулёзный процесс.</p>
+<p>Я показал, как можно подходить к решению некоторых проблем, возникающих при создании мультидоменного приложения. Вариантов решений может быть несколько, и вам самим предстоит выбрать, какие применять. Главное иметь ввиду, что идёт попытка создания как будто совершенно разных приложений, использующих один и тот же код, и которые могут использовать общие данные. Отсюда и все проблемы.</p>
+        </section>
 
-<p>TODO</p>
-      </section>
+        <footer>
+          Rails-and-postgres-multitenancy is maintained by <a href="https://github.com/ilya-tcykunov">ilya-tcykunov</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
 
+        
+      </div>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-    
   </body>
 </html>
