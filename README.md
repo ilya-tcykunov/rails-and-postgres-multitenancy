@@ -122,9 +122,9 @@ db:migrate и db:rollback должны выполняться для всех с
 	    task task_name => %w[environment db:load_config] do
 	      if ActiveRecord::Base.connection.table_exists?(Tenant.table_name)
 	        Tenant.scope_each_schema do |tenant|
-	          Tenant::PUBLIC_TABLES.each do |table_name|
-	            ActiveRecord::Base.connection.execute("create table #{tenant.schema}.#{table_name} (like public.#{table_name} including all);")
-	          end
+	          if ActiveRecord::Base.connection.query("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = '#{table_name}');")[0][0] == 't'
+              ActiveRecord::Base.connection.execute("create table #{tenant.schema}.#{table_name} (like public.#{table_name} including all);")
+            end
 
 	          Rake::Task[task_name].execute
 
