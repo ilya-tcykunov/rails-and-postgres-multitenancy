@@ -1,44 +1,25 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-us">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta charset="UTF-8">
     <title>Rails-and-postgres-multitenancy by ilya-tsykunov</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/github-dark.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
+    <section class="page-header">
+      <h1 class="project-name">Rails-and-postgres-multitenancy</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy" class="btn">View on GitHub</a>
+      <a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div class="wrapper">
-
-      <section>
-        <div id="title">
-          <h1>Rails-and-postgres-multitenancy</h1>
-          <p></p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/ilya-tsykunov">ilya-tsykunov</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
-
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="ruby-on-rails-и-postgresql-мультидоменность" class="anchor" href="#ruby-on-rails-%D0%B8-postgresql-%D0%BC%D1%83%D0%BB%D1%8C%D1%82%D0%B8%D0%B4%D0%BE%D0%BC%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby on Rails и PostgreSQL: мультидоменность</h1>
 
 <p>В интернете можно найти много похожих между собой статей, в которых говорится, как реализоать мультидоменность приложения на RoR, используя схемы PostgreSQL. Например, <a href="http://railscasts.com/episodes/389-multitenancy-with-postgresql?view=asciicast">эта</a> и <a href="http://jerodsanto.net/2011/07/building-multi-tenant-rails-apps-with-postgresql-schemas/">эта</a>. Лично я в качестве основы использовал код из railscast. Но при практической реализации какого-либо варианта возникает множество проблем. В данной статье будут описаны некоторые из таких проблем и мои способы их решения.</p>
@@ -289,11 +270,16 @@ ActionMailer::Base.send(:include, ActionMailerBasePatch)
 <a id="Заключение" class="anchor" href="#%D0%97%D0%B0%D0%BA%D0%BB%D1%8E%D1%87%D0%B5%D0%BD%D0%B8%D0%B5" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Заключение</h2>
 
 <p>Я показал, как можно подходить к решению некоторых проблем, возникающих при создании мультидоменного приложения. Вариантов решений может быть несколько, и вам самим предстоит выбрать, какие применять. Главное иметь ввиду, что идёт попытка создания как будто совершенно разных приложений, использующих один и тот же код, и которые могут использовать общие данные. Отсюда и все проблемы.</p>
-      </section>
 
-    </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
-              <script type="text/javascript">
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/ilya-tsykunov/rails-and-postgres-multitenancy">Rails-and-postgres-multitenancy</a> is maintained by <a href="https://github.com/ilya-tsykunov">ilya-tsykunov</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+            <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
